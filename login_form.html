@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>Login Testing</title>
+
+<script>
+var username = "";
+var password = "";
+
+var stickman = "&nbsp;\\__<u>O</u>__/" + "<br>";
+stickman +=    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|" + "<br>";
+stickman +=    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|" + "<br>";
+stickman +=    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;\\" + "<br>";
+stickman +=    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;\
+
+\" + "<br>";
+stickman +=    "&nbsp;&nbsp;&nbsp;d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;b";
+
+var load_overview = function(username) {
+	// Loads overview data about a user and writes to the page.
+	// No idea how I'm going to make database queries here.
+	var userData = "";
+	userData += "Username: " + username + "<br>";
+	userData += "Level: " + username.length + "<br>";
+	userData += "Awesome: Yes" + "<br>";
+	userData += stickman;
+	document.getElementById("userOverview").innerHTML = userData;
+}
+
+var post_submit = function(username, password) {
+	// Encrypting the password here before I post it is about the
+	// extent of my security knowledge.
+	var f = document.createElement("form");
+	f.method = "POST";
+	f.action = "login.html";
+	
+	var userField = document.createElement("input");
+	userField.type = "text";
+	userField.id = "username";
+	userField.value = username;
+
+	var passField = document.createElement("input");
+	passField.type = "text";
+	passField.id = "password";
+	passField.value = password;
+
+	f.appendChild(userField);
+	f.appendChild(passField);
+	f.submit();
+}
+
+var self_submit = function() {
+	// Get input from form and clear field.
+	var message = "";
+	var input = document.getElementById("formInput").value;
+	document.getElementById("formInput").value = "";
+
+	// Add input to next empty element
+	if (!username) {
+		username = input;
+		load_overview(username);
+		message = "Username: " + username;
+	 	document.getElementById("username").innerHTML = message;
+	} else if (!password) {
+		password = input;
+		message = "Password: " + password;
+		document.getElementById("password").innerHTML = message;
+	} else {
+		if (password != input) {
+			message = "The two entered passwords did not 
+
+match.";
+			document.getElementById("retyped").innerHTML = 
+
+message;
+		} else {
+			// All's clear. Submit full form to the server.
+			message = "You're all clear, kid!";
+			document.getElementById("retyped").innerHTML = 
+
+message;
+			setTimeout(function() { post_submit(username, 
+
+password); },
+				   3000);
+		}
+	}
+	return false;
+}
+</script>
+
+</head>
+<body>
+
+<p id="username"></p>
+<p id="password"></p>
+<p id="retyped"></p>
+
+<form method="POST" onsubmit="return self_submit();" id="loginForm">
+<input type="text" id="formInput">
+<input type="submit" value="Go">
+</form>
+
+<p id="userOverview"></p>
+
+</body>
+</html>
